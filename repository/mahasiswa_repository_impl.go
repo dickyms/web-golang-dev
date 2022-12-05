@@ -55,3 +55,9 @@ func (repository *MahasiswaRepositoryImpl) Save(ctx context.Context, tx *sql.Tx,
 
 	return mahasiswa
 }
+
+func (repository *MahasiswaRepositoryImpl) Delete(ctx context.Context, tx *sql.Tx, mahasiswa domain.Mahasiswa) {
+	SQL := "DELETE FROM mahasiswa WHERE Id = $1"
+	_, err := tx.ExecContext(ctx, SQL, mahasiswa.Id)
+	utils.PanicIfError(err)
+}

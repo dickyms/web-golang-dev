@@ -58,3 +58,16 @@ func (controller *MahasiswaControllerImpl) Create(writer http.ResponseWriter, re
 
 	utils.WriteToResponseBody(writer, webResponse)
 }
+
+func (controller *MahasiswaControllerImpl) Delete(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
+	mahasiswaId := params.ByName("mahasiswaId")
+	id, err := strconv.Atoi(mahasiswaId)
+	utils.PanicIfError(err)
+
+	controller.MahasiswaService.Delete(request.Context(), id)
+	webResponse := web.WebResponse{
+		Code: 200,
+		Status: "OK",
+	}
+	utils.WriteToResponseBody(writer, webResponse)
+}

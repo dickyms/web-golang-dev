@@ -65,3 +65,16 @@ func (service *MahasiswaServiceImpl) Create(ctx context.Context, request web.Mah
 
 	return utils.ToMahasiswaResponse(mahasiswa)
 }
+
+func (service *MahasiswaServiceImpl) Delete(ctx context.Context, mahasiswaId int) {
+	tx, err := service.DB.Begin()
+	utils.PanicIfError(err)
+	defer utils.CommitOrRollback(tx)
+
+	mahasiswa, err := service.MahasiswaRepository.FindById(ctx, tx, mahasiswaId)
+	if err != nil {
+		panic(exception.NewNotFoundError(err.Error()))
+	}
+
+	service.MahasiswaRepository.Delete(ctx, tx, mahasiswa)
+}
