@@ -6,6 +6,7 @@ import (
 	"web-golang/utils"
 	"web-golang/repository"
 	"web-golang/model/web"
+	"web-golang/model/domain"
 	"web-golang/exception"
 )
 
@@ -42,10 +43,10 @@ func (service *MahasiswaServiceImpl) FindById(ctx context.Context, mahasiswaId i
 	return utils.ToMahasiswaResponse(mahasiswa)
 }
 
-func (service *MahasiswaServiceImpl) Create(ctx context.Context, request web.MahasiswaCreateRequest) web.MahasiswaResponse {
+func (service *MahasiswaServiceImpl) Create(ctx context.Context, request domain.Mahasiswa) web.MahasiswaResponse {
 	tx, err := service.DB.Begin()
-	helper.PanicIfError(err)
-	defer helper.CommitOrRollback(tx)
+	utils.PanicIfError(err)
+	defer utils.CommitOrRollback(tx)
 
 	mahasiswa := domain.Mahasiswa{
 		Id: request.Id,

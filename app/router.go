@@ -11,6 +11,7 @@ func NewRouter(mahasiswaController controller.MahasiswaController) *httprouter.R
 
 	router.GET("/api/mahasiswa", mahasiswaController.FindAll)
 	router.GET("/api/mahasiswa/:mahasiswaId", mahasiswaController.FindById)
+	router.POST("/api/mahasiswa", mahasiswaController.Create)
 
 	router.PanicHandler = exception.ErrorHandler
 

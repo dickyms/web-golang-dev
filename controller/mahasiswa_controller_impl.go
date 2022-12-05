@@ -7,6 +7,7 @@ import (
 	"web-golang/utils"
 	"web-golang/service"
 	"web-golang/model/web"
+	"web-golang/model/domain"
 )
 
 type MahasiswaControllerImpl struct {
@@ -36,6 +37,20 @@ func (controller *MahasiswaControllerImpl) FindById(writer http.ResponseWriter, 
 	utils.PanicIfError(err)
 
 	mahasiswaResponse := controller.MahasiswaService.FindById(request.Context(), id)
+	webResponse := web.WebResponse{
+		Code: 200,
+		Status: "OK",
+		Data: mahasiswaResponse,
+	}
+
+	utils.WriteToResponseBody(writer, webResponse)
+}
+
+func (controller *MahasiswaControllerImpl) Create(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
+	mahasiswaCreateRequest := domain.Mahasiswa{}
+	utils.ReadFromRequestBody(request, &mahasiswaCreateRequest)
+
+	mahasiswaResponse := controller.MahasiswaService.Create(request.Context(), mahasiswaCreateRequest)
 	webResponse := web.WebResponse{
 		Code: 200,
 		Status: "OK",
