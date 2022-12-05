@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"errors"
 	"context"
 	"database/sql"
 	"web-golang/utils"
@@ -29,4 +30,20 @@ func (repository *MahasiswaRepositoryImpl) FindAll(ctx context.Context, tx *sql.
 		paramahasiswa = append(paramahasiswa, mahasiswa)
 	}
 	return paramahasiswa
+}
+
+func (repository *MahasiswaRepositoryImpl) FindById(ctx context.Context, tx *sql.Tx, categoryId int) (domain.Category, error) {
+	SQL := "SELECT * FROM mahasiswa WHERE Id = ?"
+	rows, err := tx.QueryContext(ctx, SQL, categoryId)
+	utils.PanicIfError(err)
+	defer rows.Close()
+
+	mahasiswa := domain.Mahasiswa{}
+	if rows.Next() {
+		err := rows.Scan(&mahasiswa.Id, &mahasiswa.Nama, &mahasiswa.NIM, &mahasiswa.IPK)
+		utils.PanicIfError(err)
+		return mahasiswa, nil
+	} else {
+		return mahasiswa, errors.New("Mahasiswa is not found")
+	}
 }
