@@ -47,3 +47,11 @@ func (repository *MahasiswaRepositoryImpl) FindById(ctx context.Context, tx *sql
 		return mahasiswa, errors.New("Mahasiswa is not found")
 	}
 }
+
+func (repository *MahasiswaRepositoryImpl) Save(ctx context.Context, tx *sql.Tx, mahasiswa domain.Mahasiswa) domain.Mahasiswa {
+	SQL := "INSERT INTO mahasiswa VALUES($1, $2, $3, $4)"
+	_, err := tx.ExecContext(ctx, SQL, mahasiswa.Id, mahasiswa.Nama, mahasiswa.NIM, mahasiswa.IPK)
+	utils.PanicIfError(err)
+
+	return mahasiswa
+}
