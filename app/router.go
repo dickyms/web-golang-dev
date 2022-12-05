@@ -13,6 +13,7 @@ func NewRouter(mahasiswaController controller.MahasiswaController) *httprouter.R
 	router.GET("/api/mahasiswa/:mahasiswaId", mahasiswaController.FindById)
 	router.POST("/api/mahasiswa", mahasiswaController.Create)
 	router.DELETE("/api/mahasiswa/:mahasiswaId", mahasiswaController.Delete)
+	router.PUT("/api/mahasiswa/:mahasiswaId", mahasiswaController.Update)
 
 	router.PanicHandler = exception.ErrorHandler
 

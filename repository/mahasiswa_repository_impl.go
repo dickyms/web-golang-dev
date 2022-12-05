@@ -61,3 +61,11 @@ func (repository *MahasiswaRepositoryImpl) Delete(ctx context.Context, tx *sql.T
 	_, err := tx.ExecContext(ctx, SQL, mahasiswa.Id)
 	utils.PanicIfError(err)
 }
+
+func (repository *MahasiswaRepositoryImpl) Update(ctx context.Context, tx *sql.Tx, mahasiswa domain.Mahasiswa) domain.Mahasiswa {
+	SQL := "UPDATE mahasiswa set Nama = $2, NIM = $3, IPK = $4 WHERE Id = $1"
+	_, err := tx.ExecContext(ctx, SQL, mahasiswa.Id, mahasiswa.Nama, mahasiswa.NIM, mahasiswa.IPK)
+	utils.PanicIfError(err)
+
+	return mahasiswa
+}

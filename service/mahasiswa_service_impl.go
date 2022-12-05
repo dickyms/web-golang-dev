@@ -78,3 +78,25 @@ func (service *MahasiswaServiceImpl) Delete(ctx context.Context, mahasiswaId int
 
 	service.MahasiswaRepository.Delete(ctx, tx, mahasiswa)
 }
+
+func (service *MahasiswaServiceImpl) Update(ctx context.Context, request web.MahasiswaUpdateRequest) web.MahasiswaResponse {
+	err := service.Validate.Struct(request)
+	utils.PanicIfError(err)
+
+	tx, err := service.DB.Begin()
+	utils.PanicIfError(err)
+	defer utils.CommitOrRollback(tx)
+
+	mahasiswa, err := service.MahasiswaRepository.FindById(ctx, tx, request.Id)
+	if err != nil {
+		panic(exception.NewNotFoundError(err.Error()))
+	}
+
+	mahasiswa.Nama = request.Nama
+	mahasiswa.NIM = request.NIM
+	mahasiswa.IPK = request.IPK
+
+	mahasiswa = service.MahasiswaRepository.Update(ctx, tx, mahasiswa)
+
+	return utils.ToMahasiswaResponse(mahasiswa)
+}

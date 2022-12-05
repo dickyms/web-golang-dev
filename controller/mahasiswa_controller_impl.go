@@ -71,3 +71,24 @@ func (controller *MahasiswaControllerImpl) Delete(writer http.ResponseWriter, re
 	}
 	utils.WriteToResponseBody(writer, webResponse)
 }
+
+func (controller *MahasiswaControllerImpl) Update(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
+	mahasiswaUpdateRequest := web.MahasiswaUpdateRequest{}
+	utils.ReadFromRequestBody(request, &mahasiswaUpdateRequest)
+
+	mahasiswaId := params.ByName("mahasiswaId")
+	id, err := strconv.Atoi(mahasiswaId)
+	utils.PanicIfError(err)
+
+	mahasiswaUpdateRequest.Id = id
+
+	mahasiswaResponse := controller.MahasiswaService.Update(request.Context(), mahasiswaUpdateRequest)
+
+	webResponse := web.WebResponse{
+		Code: 200,
+		Status: "OK",
+		Data: mahasiswaResponse,
+	}
+
+	utils.WriteToResponseBody(writer, webResponse)
+}
