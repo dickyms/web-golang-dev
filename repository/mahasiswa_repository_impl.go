@@ -32,7 +32,7 @@ func (repository *MahasiswaRepositoryImpl) FindAll(ctx context.Context, tx *sql.
 	return paramahasiswa
 }
 
-func (repository *MahasiswaRepositoryImpl) FindById(ctx context.Context, tx *sql.Tx, categoryId int) (domain.Category, error) {
+func (repository *MahasiswaRepositoryImpl) FindById(ctx context.Context, tx *sql.Tx, mahasiswaId int) (domain.Mahasiswa, error) {
 	SQL := "SELECT * FROM mahasiswa WHERE Id = ?"
 	rows, err := tx.QueryContext(ctx, SQL, categoryId)
 	utils.PanicIfError(err)
