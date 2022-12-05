@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"web-golang/utils"
 	"web-golang/model/web"
+	"github.com/go-playground/validator/v10"
 )
 
 func ErrorHandler(writer http.ResponseWriter, request *http.Request, err interface{}) {
@@ -12,8 +13,30 @@ func ErrorHandler(writer http.ResponseWriter, request *http.Request, err interfa
 		return
 	}
 
+	if validationErrors(writer, request, err) {
+		return
+	}
 
 	internalServerError(writer, request, err)
+}
+
+func validationErrors(writer http.ResponseWriter, request *http.Request, err interface{}) bool {
+	exception, ok := err.(validator.ValidationErrors)
+	if ok {
+		writer.Header().Set("Content-Type", "application/json")
+		writer.WriteHeader(http.StatusBadRequest)
+
+		webResponse := web.WebResponse{
+			Code:   http.StatusBadRequest,
+			Status: "BAD REQUEST",
+			Data:   exception.Error(),
+		}
+
+		utils.WriteToResponseBody(writer, webResponse)
+		return true
+	}else{
+		return false
+	}
 }
 
 func notFoundError(writer http.ResponseWriter, request *http.Request, err interface{}) bool {

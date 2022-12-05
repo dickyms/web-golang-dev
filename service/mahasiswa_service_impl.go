@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"database/sql"
+	"github.com/go-playground/validator/v10"
 	"web-golang/utils"
 	"web-golang/repository"
 	"web-golang/model/web"
@@ -13,12 +14,14 @@ import (
 type MahasiswaServiceImpl struct {
 	MahasiswaRepository repository.MahasiswaRepository
 	DB *sql.DB
+	Validate *validator.Validate
 }
 
-func NewMahasiswaService(mahasiswaRepository repository.MahasiswaRepository, DB *sql.DB) MahasiswaService {
+func NewMahasiswaService(mahasiswaRepository repository.MahasiswaRepository, DB *sql.DB, validate *validator.Validate) MahasiswaService {
 	return &MahasiswaServiceImpl {
 		MahasiswaRepository: mahasiswaRepository,
 		DB: DB,
+		Validate: validate,
 	}
 }
 
@@ -43,7 +46,10 @@ func (service *MahasiswaServiceImpl) FindById(ctx context.Context, mahasiswaId i
 	return utils.ToMahasiswaResponse(mahasiswa)
 }
 
-func (service *MahasiswaServiceImpl) Create(ctx context.Context, request domain.Mahasiswa) web.MahasiswaResponse {
+func (service *MahasiswaServiceImpl) Create(ctx context.Context, request web.MahasiswaCreateRequest) web.MahasiswaResponse {
+	err := service.Validate.Struct(request)
+	utils.PanicIfError(err)
+	
 	tx, err := service.DB.Begin()
 	utils.PanicIfError(err)
 	defer utils.CommitOrRollback(tx)

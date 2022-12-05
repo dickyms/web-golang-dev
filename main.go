@@ -4,6 +4,7 @@ import (
 	"web-golang/utils"
 	_ "github.com/lib/pq"
 	"net/http"
+	"github.com/go-playground/validator/v10"
 	"web-golang/app"
 	"web-golang/controller"
 	"web-golang/service"
@@ -12,8 +13,9 @@ import (
 
 func main() {
 	db := app.NewDB()
+	validate := validator.New()
 	mahasiswaRepository := repository.NewMahasiswaRepository()
-	mahasiswaService := service.NewMahasiswaService(mahasiswaRepository, db)
+	mahasiswaService := service.NewMahasiswaService(mahasiswaRepository, db, validate)
 	mahasiswaController := controller.NewMahasiswaController(mahasiswaService)
 	router := app.NewRouter(mahasiswaController)
 

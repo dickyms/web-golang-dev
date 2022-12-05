@@ -7,7 +7,6 @@ import (
 	"web-golang/utils"
 	"web-golang/service"
 	"web-golang/model/web"
-	"web-golang/model/domain"
 )
 
 type MahasiswaControllerImpl struct {
@@ -47,7 +46,7 @@ func (controller *MahasiswaControllerImpl) FindById(writer http.ResponseWriter, 
 }
 
 func (controller *MahasiswaControllerImpl) Create(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
-	mahasiswaCreateRequest := domain.Mahasiswa{}
+	mahasiswaCreateRequest := web.MahasiswaCreateRequest{}
 	utils.ReadFromRequestBody(request, &mahasiswaCreateRequest)
 
 	mahasiswaResponse := controller.MahasiswaService.Create(request.Context(), mahasiswaCreateRequest)
