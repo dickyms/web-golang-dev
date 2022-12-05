@@ -41,3 +41,20 @@ func (service *MahasiswaServiceImpl) FindById(ctx context.Context, mahasiswaId i
 	}
 	return utils.ToMahasiswaResponse(mahasiswa)
 }
+
+func (service *MahasiswaServiceImpl) Create(ctx context.Context, request web.MahasiswaCreateRequest) web.MahasiswaResponse {
+	tx, err := service.DB.Begin()
+	helper.PanicIfError(err)
+	defer helper.CommitOrRollback(tx)
+
+	mahasiswa := domain.Mahasiswa{
+		Id: request.Id,
+		Nama: request.Nama,
+		NIM: request.NIM,
+		IPK: request.IPK,
+	}
+
+	mahasiswa = service.MahasiswaRepository.Save(ctx, tx, mahasiswa)
+
+	return utils.ToMahasiswaResponse(mahasiswa)
+}
