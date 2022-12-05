@@ -6,6 +6,7 @@ import (
 	"web-golang/utils"
 	"web-golang/repository"
 	"web-golang/model/web"
+	"web-golang/exception"
 )
 
 type MahasiswaServiceImpl struct {
@@ -27,4 +28,15 @@ func (service *MahasiswaServiceImpl) FindAll(ctx context.Context) []web.Mahasisw
 
 	paramahasiswa := service.MahasiswaRepository.FindAll(ctx, tx)
 	return utils.ToMahasiswaResponses(paramahasiswa)
+}
+
+func (service *MahasiswaServiceImpl) FindAll(ctx context.Context, mahasiswaId int) web.MahasiswaResponse {
+	tx, err := service.DB.Begin()
+	utils.PanicIfError(err)
+	defer utils.CommitOrRollback(tx)
+
+	mahasiswa, err := service.MahasiswaRepository.FindById(ctx, tx, mahasiswaId)
+	if err != nil {
+		panic(exception.NewNotFoundError(err.Error()))
+	}
 }
