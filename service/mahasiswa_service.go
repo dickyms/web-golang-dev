@@ -7,5 +7,5 @@ import (
 
 type MahasiswaService interface {
 	FindAll(ctx context.Context) []web.MahasiswaResponse
-	FindAll(ctx context.Context, mahasiswaId int) web.MahasiswaResponse
+	FindById(ctx context.Context, mahasiswaId int) web.MahasiswaResponse
 }

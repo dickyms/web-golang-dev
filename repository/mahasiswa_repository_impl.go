@@ -33,8 +33,8 @@ func (repository *MahasiswaRepositoryImpl) FindAll(ctx context.Context, tx *sql.
 }
 
 func (repository *MahasiswaRepositoryImpl) FindById(ctx context.Context, tx *sql.Tx, mahasiswaId int) (domain.Mahasiswa, error) {
-	SQL := "SELECT * FROM mahasiswa WHERE Id = ?"
-	rows, err := tx.QueryContext(ctx, SQL, categoryId)
+	SQL := "select Id, Nama, NIM, IPK from mahasiswa where Id = $1"
+	rows, err := tx.QueryContext(ctx, SQL, mahasiswaId)
 	utils.PanicIfError(err)
 	defer rows.Close()
 

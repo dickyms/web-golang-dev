@@ -9,7 +9,8 @@ import (
 func NewRouter(mahasiswaController controller.MahasiswaController) *httprouter.Router{
 	router := httprouter.New()
 
-	router.GET("/api/paramahasiswa", mahasiswaController.FindAll)
+	router.GET("/api/mahasiswa", mahasiswaController.FindAll)
+	router.GET("/api/mahasiswa/:mahasiswaId", mahasiswaController.FindById)
 
 	router.PanicHandler = exception.ErrorHandler
 

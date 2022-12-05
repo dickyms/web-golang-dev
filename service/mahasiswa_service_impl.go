@@ -30,7 +30,7 @@ func (service *MahasiswaServiceImpl) FindAll(ctx context.Context) []web.Mahasisw
 	return utils.ToMahasiswaResponses(paramahasiswa)
 }
 
-func (service *MahasiswaServiceImpl) FindAll(ctx context.Context, mahasiswaId int) web.MahasiswaResponse {
+func (service *MahasiswaServiceImpl) FindById(ctx context.Context, mahasiswaId int) web.MahasiswaResponse {
 	tx, err := service.DB.Begin()
 	utils.PanicIfError(err)
 	defer utils.CommitOrRollback(tx)
@@ -39,4 +39,5 @@ func (service *MahasiswaServiceImpl) FindAll(ctx context.Context, mahasiswaId in
 	if err != nil {
 		panic(exception.NewNotFoundError(err.Error()))
 	}
+	return utils.ToMahasiswaResponse(mahasiswa)
 }
